@@ -1,0 +1,27 @@
+{
+  "name": "kzm",
+  "version": "1.0.0",
+  "description": "base bot kosong",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "kyyryuu",
+  "license": "MIT",
+  "dependencies": {
+    "@adiwajshing/keyed-db": "^0.2.4",
+    "@hapi/boom": "^10.0.1",
+    "@whiskeysockets/baileys": "npm:@shennmine/baileys",
+    "awesome-phonenumber": "^2.64.0",
+    "axios": "^1.6.8",
+    "crypto": "^1.0.1",
+    "fs": "0.0.1-security",
+    "fluent-ffmpeg": "^2.1.2",
+    "node-webpmux": "^3.1.0",
+    "os": "^0.1.2",
+    "pino": "^7.0.5", 
+    "path": "^0.12.7",
+    "url": "^0.11.4", 
+    "wa-sticker-formatter": "^4.4.4"
+  }
+}
