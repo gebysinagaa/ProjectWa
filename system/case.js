@@ -124,7 +124,12 @@ const plug = {
 
 // === Eksekusi plugin sesuai command ===
 for (let plugin of plugins) {
-    if (plugin.command && plugin.command.find(e => {
+    if (!plugin.command) continue;
+
+    // Biar selalu array
+    const commands = Array.isArray(plugin.command) ? plugin.command : [plugin.command];
+
+    if (commands.find(e => {
         if (e instanceof RegExp) return e.test(command.toLowerCase());
         return e === command.toLowerCase();
     })) {
@@ -136,6 +141,7 @@ for (let plugin of plugins) {
         await plugin(m, plug);
     }
 }
+
 //######## PLUGINS ########
 switch(command) {
 
