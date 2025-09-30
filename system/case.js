@@ -102,10 +102,6 @@ const pluginsLoader = async (directory) => {
     return plugins;
 };
 
-await loadRecursive(directory);
-    return plugins;
-};
-
 // === Load semua plugin ===
 const plugins = await pluginsLoader(path.resolve(__dirname, "./plugins"));
 
