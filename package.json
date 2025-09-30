@@ -1,12 +1,12 @@
 {
-  "name": "kzm",
+  "name": "Gebz",
   "version": "1.0.0",
-  "description": "base bot kosong",
+  "description": "Sc Md kalau mood :v",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
-  "author": "kyyryuu",
+  "author": "m4rz3dev",
   "license": "MIT",
   "dependencies": {
     "@adiwajshing/keyed-db": "^0.2.4",
