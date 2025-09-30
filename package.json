@@ -1,6 +1,7 @@
 {
   "name": "Gebz",
   "version": "1.0.0",
+  "type": "module",
   "description": "Sc Md kalau mood :v",
   "main": "index.js",
   "scripts": {
