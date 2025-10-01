@@ -22,13 +22,13 @@ function loadPlugins(dir = path.join(__dirname, "system", "plugins")) {
   })
 }
 
-import store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
+const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
 
-import question = (text) => { import rl = readline.createInterface({ input: process.stdin, output: process.stdout }); return new Promise((resolve) => { rl.question(text, resolve) }) };
+const question = (text) => { import rl = readline.createInterface({ input: process.stdin, output: process.stdout }); return new Promise((resolve) => { rl.question(text, resolve) }) };
 
 async function startBotz() {
-import { state, saveCreds } = await useMultiFileAuthState("connect/session")
-import kzm = makeWASocket({
+const { state, saveCreds } = await useMultiFileAuthState("connect/session")
+const kzm = makeWASocket({
 logger: pino({ level: "silent" }),
 printQRInTerminal: false,
 auth: state,
@@ -44,7 +44,7 @@ browser: ["Ubuntu", "Chrome", "20.0.04"],
 });
 
 if (!kzm.authState.creds.registered) {
-import phoneNumber = await question('𝙼𝚊𝚜𝚞𝚔𝚊𝚗 𝙽𝚘𝚖𝚎𝚛 𝚈𝚊𝚗𝚐 𝙰𝚔𝚝𝚒𝚏 𝙰𝚠𝚊𝚕𝚒 𝙳𝚎𝚗𝚐𝚊𝚗 𝟼𝟸 :\n');
+const phoneNumber = await question('𝙼𝚊𝚜𝚞𝚔𝚊𝚗 𝙽𝚘𝚖𝚎𝚛 𝚈𝚊𝚗𝚐 𝙰𝚔𝚝𝚒𝚏 𝙰𝚠𝚊𝚕𝚒 𝙳𝚎𝚗𝚐𝚊𝚗 𝟼𝟸 :\n');
 let code = await kzm.requestPairingCode(phoneNumber);
 code = code?.match(/.{1,4}/g)?.join("-") || code;
 console.log(`𝙲𝙾𝙳𝙴 𝙿𝙰𝙸𝚁𝙸𝙽𝙶 :`, code);
@@ -61,8 +61,10 @@ if (mek.key && mek.key.remoteJid === 'status@broadcast') return
 if (!kzm.public && !mek.key.fromMe && chatUpdate.type === 'notify') return
 if (mek.key.id.startsWith('BAE5') && mek.key.id.length === 16) return
 m = smsg(kzm, mek, store)
-import("./system/case.js").then(module => {
-  module.default(kzm, m, chatUpdate, store)
+await import(fullPath)
+const caseModule = await import("./system/case.js"); caseModule.default(...)
+const file = __filename  // untuk hot reload pakai fs.watchFile
+await import(file)
 } catch (err) {
 console.log(err)
 }
