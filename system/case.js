@@ -1,4 +1,3 @@
-import "./config.js"
 import fs from "fs"
 import path from "path"
 import { pathToFileURL } from "url"
@@ -6,7 +5,16 @@ import util from "util"
 import axios from "axios"
 import { exec } from "child_process"
 import { Sticker, StickerTypes } from "wa-sticker-formatter"
-import { sendImage, sendImageAsSticker, sendVideoAsSticker } from "../lib/utils"
+import { sendImage, sendImageAsSticker, sendVideoAsSticker } from "../lib/utils.js"
+
+// Import config dengan benar
+import { fileURLToPath } from 'url'
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+// Load config
+const configPath = path.join(__dirname, 'config.js')
+await import(pathToFileURL(configPath).href)
 
 export default async function caseHandler(kzm, m, chatUpdate, store) {
 try {
@@ -61,22 +69,11 @@ const pluginsLoader = async (directory) => {
             const stat = fs.statSync(filePath);
 
             if (stat.isDirectory()) {
-                // Rekursif ke folder dalam
                 await loadRecursive(filePath);
             } else if (file.endsWith(".js") || file.endsWith(".mjs")) {
                 try {
-                    let plugin;
-
-                    if (file.endsWith(".mjs")) {
-                        // ESM pakai dynamic import()
-                        let module = await import(pathToFileURL(filePath).href);
-                        plugin = module.default || module;
-                    } else {
-                        // CJS pakai require()
-                        delete require.cache[require.resolve(filePath)];
-                        plugin = require(filePath);
-                    }
-
+                    let module = await import(pathToFileURL(filePath).href);
+                    let plugin = module.default || module;
                     plugins.push(plugin);
                 } catch (error) {
                     console.log(`[Plugin Error] ${filePath}:`, error);
@@ -89,40 +86,34 @@ const pluginsLoader = async (directory) => {
     return plugins;
 };
 
-// === Load semua plugin ===
-const plugins = await pluginsLoader(path.resolve(__dirname, "./plugins"));
+const plugins = await pluginsLoader(path.join(__dirname, "./plugins"));
 
-/**
- * Context yang dikirim ke setiap plugin
- */
 const plug = {
-    kzm,              // alias socket
-    prefix,           // prefix bot
+    kzm,
+    prefix,
     reply, 
-    command,          // command yang dipanggil user
-    text,             // isi text setelah command
-    isCreator,        // cek apakah owner
+    command,
+    text,
+    isCreator,
     isGroup: m.isGroup,
     isPrivate: !m.isGroup,
-    pushname,         // nama pengirim
-    args              // argumen array
+    pushname,
+    args
 };
 
-// === Eksekusi plugin sesuai command ===
 for (let plugin of plugins) {
     if (plugin.command && plugin.command.find(e => {
         if (e instanceof RegExp) return e.test(command.toLowerCase());
         return e === command.toLowerCase();
     })) {
-        if (plugin.owner && !isCreator) return reply(mess.owner);
-        if (plugin.group && !plug.isGroup) return reply(mess.group);
-        if (plugin.private && !plug.isPrivate) return reply(mess.private);
+        if (plugin.owner && !isCreator) return reply(global.mess.owner);
+        if (plugin.group && !plug.isGroup) return reply(global.mess.group);
+        if (plugin.private && !plug.isPrivate) return reply(global.mess.private);
 
         if (typeof plugin !== "function") return;
         await plugin(m, plug);
     }
 }
-//######## PLUGINS ########
 
 switch(command) {
 case 's':
@@ -190,11 +181,8 @@ console.log(util.format(err))
 }
 }
 
-let file = __filename
+let file = fileURLToPath(import.meta.url)
 fs.watchFile(file, () => {
   fs.unwatchFile(file)
-  console.log(`Update ${__filename}`)
-  delete require.cache[file]
-  require(file)
+  console.log(`Update ${file}`)
 })
-                   
