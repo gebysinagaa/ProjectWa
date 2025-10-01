@@ -1,4 +1,6 @@
-import makeWASocket, {
+import baileys from "@whiskeysockets/baileys";
+const {
+  default: makeWASocket,
   DisconnectReason,
   makeInMemoryStore,
   jidDecode,
@@ -6,7 +8,7 @@ import makeWASocket, {
   getContentType,
   useMultiFileAuthState,
   downloadContentFromMessage
-} from "@whiskeysockets/baileys";
+} = baileys;
 
 import pino from "pino";
 import { Boom } from "@hapi/boom";
