@@ -69,6 +69,17 @@ async function startBotz() {
     browser: ["Ubuntu", "Chrome", "20.0.04"],
   });
 
+    //Tambahkan fungsi decodeJid manual biar tidak error
+  kzm.decodeJid = (jid) => {
+    if (!jid) return jid;
+    if (/:\d+@/gi.test(jid)) {
+      let decode = jidDecode(jid) || {};
+      return (decode.user && decode.server && decode.user + "@" + decode.server) || jid;
+    } else {
+      return jid;
+    }
+  };
+
   if (!kzm.authState.creds.registered) {
     const phoneNumber = await question("Masukkan Nomor Awali dengan 62:\n");
     let code = await kzm.requestPairingCode(phoneNumber);
