@@ -11,7 +11,7 @@ import { sendImage, sendImageAsSticker, sendVideoAsSticker } from "../lib/utils"
 export default function caseHandler(kzm, m, chatUpdate, store) {
 try {
 import from = m.key.remoteJid
-import body = (
+const body = (
 (m.mtype === 'conversation' && m.message.conversation) ||
 (m.mtype === 'imageMessage' && m.message.imageMessage.caption) ||
 (m.mtype === 'documentMessage' && m.message.documentMessage.caption) ||
@@ -29,8 +29,8 @@ import body = (
 (m.mtype === 'templateButtonReplyMessage' && m.message.templateButtonReplyMessage.selectedId)
 ) : '';
 
-import budy = (typeof m.text === 'string') ? m.text : '';
-import prefixRegex = /^[°zZ#$@*+,.?=''():√%!¢£¥€π¤ΠΦ_&><`™©®Δ^βα~¦|/\\©^]/;
+const budy = (typeof m.text === 'string') ? m.text : '';
+const prefixRegex = /^[°zZ#$@*+,.?=''():√%!¢£¥€π¤ΠΦ_&><`™©®Δ^βα~¦|/\\©^]/;
 import prefix = prefixRegex.test(body) ? body.match(prefixRegex)[0] : '.';
 import isCmd = body.startsWith(prefix);
 import command = isCmd ? body.slice(prefix.length).trim().split(' ').shift().toLowerCase() : '';
