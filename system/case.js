@@ -1,12 +1,12 @@
-from("./config")
-import fs = from("fs");
-import path = from("path");
-import { pathToFileURL } = from("url");
-import util = from('util')
-import axios = from('axios')
-import { exec } = from("child_process")
-import { Sticker, StickerTypes } = from('wa-sticker-formatter')
-import { sendImage, sendImageAsSticker, sendVideoAsSticker } = from("../lib/utils")
+import "./config"
+import fs from "fs";
+import path from "path";
+import { pathToFileURL } from "url";
+import util from 'util'
+import axios from'axios'
+import { exec } from"child_process"
+import { Sticker, StickerTypes } from 'wa-sticker-formatter'
+import { sendImage, sendImageAsSticker, sendVideoAsSticker } from "../lib/utils"
 
 export default function caseHandler(kzm, m, chatUpdate, store) {
 try {
