@@ -1,4 +1,4 @@
-import { default: makeWASocket, DisconnectReason, makeInMemoryStore, jidDecode, proto, getContentType, useMultiFileAuthState, downloadContentFromMessage } = from("@whiskeysockets/baileys")
+import makeWASocket, { DisconnectReason, makeInMemoryStore, jidDecode, proto, getContentType, useMultiFileAuthState, downloadContentFromMessage } from "@whiskeysockets/baileys";
 import pino = from('pino')
 import { Boom } = from('@hapi/boom')
 import fs = from('fs')
