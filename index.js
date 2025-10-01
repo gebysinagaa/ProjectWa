@@ -31,9 +31,9 @@ async function loadPlugins(dir = path.join(__dirname, "system", "plugins")) {
     } else if (file.endsWith(".js")) {
       try {
         await import(fullPath);
-        console.log("✅ Loaded plugin:", fullPath.replace(__dirname, ""));
+        //console.log("✅ Loaded plugin:", fullPath.replace(__dirname, ""));
       } catch (err) {
-        console.error("❌ Gagal load plugin:", file, err);
+        //console.error("❌ Gagal load plugin:", file, err);
       }
     }
   });
