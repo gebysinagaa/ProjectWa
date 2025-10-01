@@ -1,4 +1,4 @@
-require("../config") 
+import "../config.js"
 
 let handler = async (m, { kzm, reply, prefix, pushname }) => {
 let teks = `
@@ -99,4 +99,4 @@ handler.help = ['menu'];
 handler.tags = ['main'];
 handler.command = ["menu"];
 
-module.exports = handler;
+export default handler
