@@ -1,10 +1,10 @@
 import makeWASocket, { DisconnectReason, makeInMemoryStore, jidDecode, proto, getContentType, useMultiFileAuthState, downloadContentFromMessage } from "@whiskeysockets/baileys";
-import pino from('pino')
-import { Boom } from('@hapi/boom')
-import fs from('fs')
-import path from('path')
-import readline from("readline");
-import PhoneNumber from('awesome-phonenumber')
+import pino from 'pino'
+import { Boom } from '@hapi/boom'
+import fs from 'fs'
+import path from 'path'
+import readline from "readline";
+import PhoneNumber from 'awesome-phonenumber'
 
 function loadPlugins(dir = path.join(__dirname, "system", "plugins")) {
   fs.readdirSync(dir).forEach(file => {
