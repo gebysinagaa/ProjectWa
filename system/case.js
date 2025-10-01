@@ -1,64 +1,64 @@
 import "./config"
-import fs from "fs";
-import path from "path";
-import { pathToFileURL } from "url";
-import util from 'util'
-import axios from'axios'
-import { exec } from"child_process"
-import { Sticker, StickerTypes } from 'wa-sticker-formatter'
+import fs from "fs"
+import path from "path"
+import { pathToFileURL } from "url"
+import util from "util"
+import axios from "axios"
+import { exec } from "child_process"
+import { Sticker, StickerTypes } from "wa-sticker-formatter"
 import { sendImage, sendImageAsSticker, sendVideoAsSticker } from "../lib/utils"
 
-export default function caseHandler(kzm, m, chatUpdate, store) {
+export default async function caseHandler(kzm, m, chatUpdate, store) {
 try {
-import from = m.key.remoteJid
+const from = m.key.remoteJid
 const body = (
-(m.mtype === 'conversation' && m.message.conversation) ||
-(m.mtype === 'imageMessage' && m.message.imageMessage.caption) ||
-(m.mtype === 'documentMessage' && m.message.documentMessage.caption) ||
-(m.mtype === 'videoMessage' && m.message.videoMessage.caption) ||
-(m.mtype === 'extendedTextMessage' && m.message.extendedTextMessage.text) ||
-(m.mtype === 'buttonsResponseMessage' && m.message.buttonsResponseMessage.selectedButtonId) ||
-(m.mtype === 'templateButtonReplyMessage' && m.message.templateButtonReplyMessage.selectedId)
+  (m.mtype === 'conversation' && m.message.conversation) ||
+  (m.mtype === 'imageMessage' && m.message.imageMessage.caption) ||
+  (m.mtype === 'documentMessage' && m.message.documentMessage.caption) ||
+  (m.mtype === 'videoMessage' && m.message.videoMessage.caption) ||
+  (m.mtype === 'extendedTextMessage' && m.message.extendedTextMessage.text) ||
+  (m.mtype === 'buttonsResponseMessage' && m.message.buttonsResponseMessage.selectedButtonId) ||
+  (m.mtype === 'templateButtonReplyMessage' && m.message.templateButtonReplyMessage.selectedId)
 ) ? (
-(m.mtype === 'conversation' && m.message.conversation) ||
-(m.mtype === 'imageMessage' && m.message.imageMessage.caption) ||
-(m.mtype === 'documentMessage' && m.message.documentMessage.caption) ||
-(m.mtype === 'videoMessage' && m.message.videoMessage.caption) ||
-(m.mtype === 'extendedTextMessage' && m.message.extendedTextMessage.text) ||
-(m.mtype === 'buttonsResponseMessage' && m.message.buttonsResponseMessage.selectedButtonId) ||
-(m.mtype === 'templateButtonReplyMessage' && m.message.templateButtonReplyMessage.selectedId)
-) : '';
+  (m.mtype === 'conversation' && m.message.conversation) ||
+  (m.mtype === 'imageMessage' && m.message.imageMessage.caption) ||
+  (m.mtype === 'documentMessage' && m.message.documentMessage.caption) ||
+  (m.mtype === 'videoMessage' && m.message.videoMessage.caption) ||
+  (m.mtype === 'extendedTextMessage' && m.message.extendedTextMessage.text) ||
+  (m.mtype === 'buttonsResponseMessage' && m.message.buttonsResponseMessage.selectedButtonId) ||
+  (m.mtype === 'templateButtonReplyMessage' && m.message.templateButtonReplyMessage.selectedId)
+) : ''
 
-const budy = (typeof m.text === 'string') ? m.text : '';
-const prefixRegex = /^[°zZ#$@*+,.?=''():√%!¢£¥€π¤ΠΦ_&><`™©®Δ^βα~¦|/\\©^]/;
-import prefix = prefixRegex.test(body) ? body.match(prefixRegex)[0] : '.';
-import isCmd = body.startsWith(prefix);
-import command = isCmd ? body.slice(prefix.length).trim().split(' ').shift().toLowerCase() : '';
-import args = body.trim().split(/ +/).slice(1)
-import text = q = args.join(" ")
-import quoted = m.quoted ? m.quoted : m
-import mime = (quoted.msg || quoted).mimetype || ''
-import qmsg = (quoted.msg || quoted)
-import sender = m.key.fromMe ? (kzm.user.id.split(':')[0]+'@s.whatsapp.net' || kzm.user.id) : (m.key.participant || m.key.remoteJid)
-import botNumber = await kzm.decodeJid(kzm.user.id)
-import senderNumber = sender.split('@')[0]
-import isCreator = (m && m.sender && [botNumber, ...global.info.ownerNumber].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)) || false;
-import pushname = m.pushName || `${senderNumber}`
-import isBot = botNumber.includes(senderNumber)
+const budy = (typeof m.text === 'string') ? m.text : ''
+const prefixRegex = /^[°zZ#$@*+,.?=''():√%!¢£¥€π¤ΠΦ_&><`™©®Δ^βα~¦|/\\©^]/
+const prefix = prefixRegex.test(body) ? body.match(prefixRegex)[0] : '.'
+const isCmd = body.startsWith(prefix)
+const command = isCmd ? body.slice(prefix.length).trim().split(' ').shift().toLowerCase() : ''
+const args = body.trim().split(/ +/).slice(1)
+const text = args.join(" ")
+const quoted = m.quoted ? m.quoted : m
+const mime = (quoted.msg || quoted).mimetype || ''
+const qmsg = (quoted.msg || quoted)
+const sender = m.key.fromMe ? (kzm.user.id.split(':')[0]+'@s.whatsapp.net' || kzm.user.id) : (m.key.participant || m.key.remoteJid)
+const botNumber = await kzm.decodeJid(kzm.user.id)
+const senderNumber = sender.split('@')[0]
+const isCreator = (m && m.sender && [botNumber, ...global.info.ownerNumber].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)) || false
+const pushname = m.pushName || `${senderNumber}`
+const isBot = botNumber.includes(senderNumber)
 
-import reply = (teks) => {
-kzm.sendMessage(from, { text : teks }, { quoted : m })
+const reply = (teks) => {
+  kzm.sendMessage(from, { text : teks }, { quoted : m })
 }
 
 //######## PLUGINS ########
-import pluginsLoader = async (directory) => {
+const pluginsLoader = async (directory) => {
     let plugins = [];
 
-    import loadRecursive = async (dir) => {
-        import files = fs.readdirSync(dir);
+    const loadRecursive = async (dir) => {
+        const files = fs.readdirSync(dir);
         for (let file of files) {
-            import filePath = path.join(dir, file);
-            import stat = fs.statSync(filePath);
+            const filePath = path.join(dir, file);
+            const stat = fs.statSync(filePath);
 
             if (stat.isDirectory()) {
                 // Rekursif ke folder dalam
@@ -69,15 +69,12 @@ import pluginsLoader = async (directory) => {
 
                     if (file.endsWith(".mjs")) {
                         // ESM pakai dynamic import()
-                        import module = await import(pathToFileURL(filePath).href);
+                        let module = await import(pathToFileURL(filePath).href);
                         plugin = module.default || module;
                     } else {
-                        // CJS pakai from()
-                        import resolvedPath = from.resolve(filePath);
-                        if (from.cache[resolvedPath]) {
-                            delete from.cache[resolvedPath];
-                        }
-                        plugin = from(filePath);
+                        // CJS pakai require()
+                        delete require.cache[require.resolve(filePath)];
+                        plugin = require(filePath);
                     }
 
                     plugins.push(plugin);
@@ -93,23 +90,22 @@ import pluginsLoader = async (directory) => {
 };
 
 // === Load semua plugin ===
-import plugins = await pluginsLoader(path.resolve(__dirname, "./plugins"));
+const plugins = await pluginsLoader(path.resolve(__dirname, "./plugins"));
 
 /**
  * Context yang dikirim ke setiap plugin
  */
-import plug = {
+const plug = {
     kzm,              // alias socket
-    prefix,            // prefix bot
+    prefix,           // prefix bot
     reply, 
-    command,           // command yang dipanggil user
-    reply,             // fungsi reply biasa
-    text,              // isi text setelah command
-    isCreator,         // cek apakah owner
+    command,          // command yang dipanggil user
+    text,             // isi text setelah command
+    isCreator,        // cek apakah owner
     isGroup: m.isGroup,
     isPrivate: !m.isGroup,
-    pushname,          // nama pengirim
-    args               // argumen array
+    pushname,         // nama pengirim
+    args              // argumen array
 };
 
 // === Eksekusi plugin sesuai command ===
@@ -127,65 +123,65 @@ for (let plugin of plugins) {
     }
 }
 //######## PLUGINS ########
-switch(command) {
 
+switch(command) {
 case 's':
 case 'stiker':
 case 'sticker': {
-  if (!quoted) return reply(`ᴋɪʀɪᴍ ᴀᴛᴀᴜ ʀᴇᴘʟʏ ғᴏᴛᴏ/ᴠɪᴅᴇᴏ/ɢɪғ ᴡɪᴛʜ ᴄᴀᴘᴛɪᴏɴ ${prefix+command}\nᴠɪᴅᴇᴏ ᴅᴜʀᴀsɪ 1-20 ᴅᴇᴛɪᴋ`)
+  if (!quoted) return reply(`Kirim atau reply foto/video/gif dengan caption ${prefix+command}\nVideo durasi 1-20 detik`)
   kzm.sendMessage(m.chat, { react: { text: '🕒', key: m.key }})
 
   if (/image/.test(mime)) {
     let media = await quoted.download()
     await sendImageAsSticker(kzm, m.chat, media, m, { packname: global.sticker.packname, author: global.sticker.author })
   } else if (/video/.test(mime)) {
-    if ((quoted.msg || quoted).seconds > 20) return reply(`ᴋɪʀɪᴍ ᴠɪᴅᴇᴏ ᴅᴜʀᴀsɪ 1-20 ᴅᴇᴛɪᴋ`)
+    if ((quoted.msg || quoted).seconds > 20) return reply(`Kirim video durasi 1-20 detik`)
     kzm.sendMessage(m.chat, { react: { text: '🕒', key: m.key }})
     let media = await quoted.download()
     await sendVideoAsSticker(kzm, m.chat, media, m, { packname: global.sticker.packname, author: global.sticker.author })
   } else {
-    reply(`ᴋɪʀɪᴍ ᴀᴛᴀᴜ ʀᴇᴘʟʏ ғᴏᴛᴏ/ᴠɪᴅᴇᴏ/ɢɪғ ᴡɪᴛʜ ᴄᴀᴘᴛɪᴏɴ ${prefix+command}\nᴠɪᴅᴇᴏ ᴅᴜʀᴀsɪ 1-20 ᴅᴇᴛɪᴋ`)
+    reply(`Kirim atau reply foto/video/gif dengan caption ${prefix+command}\nVideo durasi 1-20 detik`)
   }
 }
 break
 
 default:
 if (budy.startsWith('=>')) {
-if (!isCreator) return
-function Return(sul) {
-sat = JSON.stringify(sul, null, 2)
-bang = util.format(sat)
-if (sat == undefined) {
-bang = util.format(sul)
-}
-return m.reply(bang)
-}
-try {
-m.reply(util.format(eval(`(async () => { return ${budy.slice(3)} })()`)))
-} catch (e) {
-m.reply(String(e))
-}
+  if (!isCreator) return
+  function Return(sul) {
+    let sat = JSON.stringify(sul, null, 2)
+    let bang = util.format(sat)
+    if (sat == undefined) {
+      bang = util.format(sul)
+    }
+    return m.reply(bang)
+  }
+  try {
+    m.reply(util.format(eval(`(async () => { return ${budy.slice(3)} })()`)))
+  } catch (e) {
+    m.reply(String(e))
+  }
 }
 
 if (budy.startsWith('>')) {
-if (!isCreator) return
-let kode = budy.trim().split(/ +/)[0]
-let teks
-try {
-teks = await eval(`(async () => { ${kode == ">>" ? "return" : ""} ${q}})()`)
-} catch (e) {
-teks = e
-} finally {
-await m.reply(from('util').format(teks))
-}
+  if (!isCreator) return
+  let kode = budy.trim().split(/ +/)[0]
+  let teks
+  try {
+    teks = await eval(`(async () => { ${kode == ">>" ? "return" : ""} ${text}})()`)
+  } catch (e) {
+    teks = e
+  } finally {
+    await m.reply(util.format(teks))
+  }
 }
 
 if (budy.startsWith('$')) {
-if (!isCreator) return
-exec(budy.slice(2), (err, stdout) => {
-if (err) return m.reply(`${err}`)
-if (stdout) return m.reply(stdout)
-})
+  if (!isCreator) return
+  exec(budy.slice(2), (err, stdout) => {
+    if (err) return m.reply(`${err}`)
+    if (stdout) return m.reply(stdout)
+  })
 }
 }
 
@@ -194,11 +190,11 @@ console.log(util.format(err))
 }
 }
 
-
-let file = from.resolve(__filename)
+let file = __filename
 fs.watchFile(file, () => {
-fs.unwatchFile(file)
-console.log(`Update ${__filename}`)
-delete from.cache[file]
-from(file)
+  fs.unwatchFile(file)
+  console.log(`Update ${__filename}`)
+  delete require.cache[file]
+  require(file)
 })
+                   
